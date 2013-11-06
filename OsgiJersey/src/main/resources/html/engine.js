@@ -3,7 +3,7 @@ function registerMessages() {
     if (!!window.EventSource) {
 
         var source = new EventSource('/servlet/sse');
-        
+
         source.addEventListener('message', function(e) {
             console.log(e.data);
         }, false);
@@ -17,14 +17,20 @@ function registerMessages() {
                 console.log(e);
             }
         }, false);
-        
-        source.addEventListener('msg1', function (e){
+
+        source.addEventListener('msg1', function(e) {
             display(e.data);
         });
-        
-        source.addEventListener('msg2', function (e){
+
+        source.addEventListener('msg2', function(e) {
             display(e.data);
         });
+
+        var sourceRest = new EventSource('/rest/sse');
+
+        sourceRest.addEventListener('open', function(e) {
+            console.log("Open EventSournce for /rest/sse");
+        }, false);
     }
 
 }

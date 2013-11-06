@@ -39,4 +39,8 @@
             <activatedProfile>run-on-felix</activatedProfile>
         </activatedProfiles>
     </action>
+    <action>
+            <actionName>CUSTOM-generate-features-xml</actionName>
+            <displayName>generate-features-xml</displayName>
+        </action>
 </actions>

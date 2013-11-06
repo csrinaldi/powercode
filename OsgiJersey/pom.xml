@@ -11,10 +11,16 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jersey.version>2.3.1</jersey.version>
+        <jersey.version>2.4</jersey.version>
+        <h2k.version>2.2.0-b21</h2k.version>
+        <jaxrs.api.version>2.0</jaxrs.api.version>
+        <javax.annotation.version>1.2</javax.annotation.version>
+        <javax.validation.version>1.1.0.Final</javax.validation.version>
+        <guava.version>14.0.1</guava.version>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
@@ -22,45 +28,122 @@
             <scope>provided</scope>
         </dependency>
         
+         <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>${javax.annotation.version}</version>
+        </dependency>
+
+        
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        
+        <!-- Jersey and JAX-RS -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${jaxrs.api.version}</version>
+            <!--scope>provided</scope-->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>${jersey.version}</version>
+            <!--scope>provided</scope-->
+        </dependency>
+        
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${jersey.version}</version>
-            <scope>provided</scope>
+            <!--scope>provided</scope-->
         </dependency>
         
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
             <version>${jersey.version}</version>
-            <scope>provided</scope>
+            <!--scope>provided</scope-->
         </dependency>
         
-        <!--dependency>
+        <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet-core</artifactId>
             <version>${jersey.version}</version>
-            <scope>provided</scope>
-        </dependency-->
+            <!--scope>provided</scope-->
+        </dependency>
         
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-sse</artifactId>
             <version>${jersey.version}</version>
-            <scope>provided</scope>
+            <!--scope>provided</scope-->
+        </dependency>
+        
+        <!-- HK2 Dependencies -->
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2-api</artifactId>
+            <version>${h2k.version}</version>
+            <!--scope>provided</scope-->
         </dependency>
         
         <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2-locator</artifactId>
+            <version>${h2k.version}</version>
+            <!--scope>provided</scope-->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>osgi-resource-locator</artifactId>
+            <version>1.0.1</version>
+            <!--scope>provided</scope-->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2-utils</artifactId>
+            <version>${h2k.version}</version>
+            <!--scope>provided</scope-->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.hk2.external</groupId>
+            <artifactId>asm-all-repackaged</artifactId>
+            <version>${h2k.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.hk2.external</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${h2k.version}</version>
+        </dependency>
+        
+        <!-- Validation -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation.version}</version>
+            <!--scope>provided</scope-->
+        </dependency>
+
+        <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-api</artifactId>
-            <version>3.0.2</version>
+            <version>[3.0.2, 5)</version>
             <scope>provided</scope>
         </dependency>
         
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-runtime</artifactId>
-            <version>3.0.2</version>
+            <version>[3.0.2, 5)</version>
             <scope>provided</scope>
         </dependency>
         
@@ -87,10 +170,118 @@
                     </instructions>
                 </configuration>
             </plugin>
+            
+            
+            <plugin>
+                <groupId>org.apache.karaf.tooling</groupId>
+                <artifactId>features-maven-plugin</artifactId>
+                <version>2.2.11</version>
+                <executions>
+                    <execution>
+                        <id>generate</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>generate-features-xml</goal>
+                        </goals>
+                        <configuration>
+                            <!--bundles>src/main/resources/bundles.properties</bundles-->
+                            <kernelVersion>2.2.11</kernelVersion>
+                            <outputFile>target/features.xml</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            
+            
+            
         </plugins>
+        
     </build>
+    
+    <repositories>
+        <repository>
+            <id>servicemix</id>
+            <name>servicemix</name>
+            <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+    
+    
 
     <profiles>
+        <profile>
+            <id>build-to-karaf</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                    <version>3.6.2.R36x_v20110210</version>
+                </dependency>
+            
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.karaf.tooling</groupId>
+                        <artifactId>features-maven-plugin</artifactId>
+                        <version>2.2.11</version>
+                        <executions>
+                            <execution>
+                                <id>generate</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>generate-features-xml</goal>
+                                </goals>
+                                <configuration>
+                                    <!--bundles>src/main/resources/bundles.properties</bundles-->
+                                    <kernelVersion>2.2.11</kernelVersion>
+                                    <outputFile>target/features.xml</outputFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <repositories>
+                <repository>
+                    <id>oss.sonatype.org</id>
+                    <name>OSS Sonatype Staging</name>
+                    <url>https://oss.sonatype.org/content/groups/staging</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>maven2</id>
+                    <name>maven2</name>
+                    <url>http://repo.maven.apache.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+                
+            </repositories>
+        </profile>
+        
         <profile>
             <id>build-for-felix</id>
             <dependencies>
