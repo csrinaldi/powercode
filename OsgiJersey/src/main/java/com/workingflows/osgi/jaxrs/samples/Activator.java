@@ -1,6 +1,7 @@
 package com.workingflows.osgi.jaxrs.samples;
 
 import com.workingflows.osgi.jaxrs.samples.conf.MyJaxApp;
+import com.workingflows.osgi.jaxrs.samples.servlet.SseServlet;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import javax.servlet.http.HttpServlet;
@@ -17,9 +18,7 @@ public class Activator implements BundleActivator {
     private ServiceReference webContainerRef;
 
     public Activator() {
-        container = new ServletContainer(new MyJaxApp());
-        
-                
+        container = new ServletContainer();
     }
     
     public void start(BundleContext bc) throws Exception {
@@ -51,10 +50,22 @@ public class Activator implements BundleActivator {
                     // register the hello world servlet for filtering with url
                     // pattern
                     final Dictionary<String, Object> initParamsServlet = new Hashtable<String, Object>();
-                    //initParamsServlet.put("javax.ws.rs.Application", "com.workingflows.osgi.jaxrs.samples.conf.MyJaxApp");
-                    webContainer.registerServlet((HttpServlet) container, // registered
+                    initParamsServlet.put("javax.ws.rs.Application", "com.workingflows.osgi.jaxrs.samples.conf.MyJaxApp");
+                    webContainer.registerServlet(
+                            ServletContainer.class, // registered
                             new String[]{"/rest/*"}, // url patterns
                             initParamsServlet, // init params
+                            1,
+                            true,
+                            httpContext // http context
+                    );
+                    
+                    webContainer.registerServlet(
+                            (HttpServlet) new SseServlet(), // registered
+                            new String[]{"/servlet/sse"}, // url patterns
+                            initParamsServlet, // init params
+                            1,
+                            true,
                             httpContext // http context
                     );
 
